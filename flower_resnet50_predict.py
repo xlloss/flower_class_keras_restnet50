@@ -52,3 +52,4 @@ print(model_pred_class)
 
 predicted_class = class_flower_name[np.argmax(model_pred)]
 print("The predicted category is", predicted_class)
+dnn_model.save('flower_model_all.pb')
