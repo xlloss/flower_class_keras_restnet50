@@ -11,6 +11,7 @@ import pathlib
 import numpy as np
 import os
 import sys
+from model_get import model_get
 
 class_flower_name = ('daisy', 'dandelion', 'roses', 'sunflowers', 'tulips')
 height, width = 180, 180
@@ -24,21 +25,7 @@ image_resized = cv2.resize(image, (height, width))
 image = np.expand_dims(image_resized, axis = 0)
 print(image.shape)
 
-#Building the deep learning model
-dnn_model = tf.keras.Sequential()
-
-imported_model = tf.keras.applications.ResNet50(include_top = False,
-    input_shape=(180, 180, 3),
-    pooling='avg',classes = 5)
-
-for layer in imported_model.layers:
-    layer.trainable = False
-
-#Fine-tuning the imported pre-trained ResNet-50 network
-dnn_model.add(imported_model)
-dnn_model.add(Flatten())
-dnn_model.add(Dense(512, activation = 'relu'))
-dnn_model.add(Dense(5, activation = 'softmax'))
+dnn_model = model_get()
 
 save_dir = os.path.join(os.getcwd(), 'saved_models')
 filepath = os.path.join(save_dir, model_name)

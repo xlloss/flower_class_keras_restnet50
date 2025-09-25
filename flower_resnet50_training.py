@@ -10,6 +10,7 @@ import tensorflow as tf
 import os
 import numpy as np
 import pathlib
+from model_get import model_get
 
 # Learning Rate Schedule
 def lr_schedule(epoch):
@@ -58,22 +59,8 @@ validation_set = tf.keras.preprocessing.image_dataset_from_directory(
 	image_size = (height, width),
 	batch_size = training_batch_size)
 
-#Building the deep learning model
-dnn_model = tf.keras.Sequential()
 
-imported_model= tf.keras.applications.ResNet50(include_top = False,
-    input_shape = (180, 180, 3),
-    pooling = 'avg',classes = 5,
-    weights = 'imagenet')
-
-for layer in imported_model.layers:
-    layer.trainable = False
-
-#Fine-tuning the imported pre-trained ResNet-50 network
-dnn_model.add(imported_model)
-dnn_model.add(Flatten())
-dnn_model.add(Dense(512, activation = 'relu'))
-dnn_model.add(Dense(5, activation = 'softmax'))
+dnn_model = model_get()
 
 #Getting the model summary
 dnn_model.summary()
